@@ -71,7 +71,7 @@ class ClientNode(Node):
             get_result_future.add_done_callback(done_callback)
 
 
-        request = GPIO_Action.Goal() # request is initialized
+        request = ROBOT_Action.Goal() # request is initialized
         request.gpio = str("26,read") # request is set to read the pin 26
         future = self._action_client.send_goal_async(request) # sending the request
         future.add_done_callback(goal_callback) # adding a callback function to process response
@@ -94,7 +94,7 @@ class ClientNode(Node):
     def send_goal(self, gpio):
         """ This function is used to send the gpio data
         to the Test Robot """
-        goal_msg = GPIO_Action.Goal()
+        goal_msg = ROBOT_Action.Goal()
         goal_msg.gpio = str(gpio)
 
         self._action_client.wait_for_server()
