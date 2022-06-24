@@ -19,8 +19,10 @@ setup(
     maintainer_email='aliugur997@gmail.com',
     keywords=['ROS'],
     classifiers=[
+        'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
+        'Topic :: Software Development',
     ],
     description='ROS2 Action Server to control Raspberry Pi GPIO on Test Robot',
     license='Apache License, Version 2.0',

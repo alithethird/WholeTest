@@ -6,18 +6,22 @@ from rclpy.action import ActionClient
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 
-from robot_interface.action import ROBOT as ROBOT_Action
+from robot_interface.action import ROBOT as robot_Action
 from std_msgs.msg import String
 from example_interfaces.srv import Trigger
 
 class ClientNode(Node):
-    """ This is the main ROS2 communication class"""
+    """ This is the main Control Hub communication class
+
+    :param Node: Main ROS2 node of the Control Hub
+    :type Node: rclpy.Node
+    """
     def __init__(self):
         super().__init__("clientell")
         self.service_done_event = Event()
         server_cb_group = ReentrantCallbackGroup()
         action_cb_group = None
-        self._action_client = ActionClient(self, ROBOT_Action,
+        self._action_client = ActionClient(self, robot_Action,
                                            'test_robot_server',
                                            callback_group=action_cb_group)
         self.subscriber_ = self.create_subscription(String,
@@ -35,8 +39,15 @@ class ClientNode(Node):
         self._get_result_future = 0
 
     def callback_button_state(self, request, response):
-        """ This callback function runs when a button read request comes from UI 
-        :param request: request coming from UI to read button state"""
+        """ This callback function runs when a button read request comes from UI
+
+        :param request: request coming from UI to read button state
+        :type request: ROBOT.goal
+        :param response: response of button read value
+        :type response: example_interfaces.srv.Trigger
+        :return: response
+        :rtype: example_interfaces.srv.Trigger
+        """
         if not self._action_client.wait_for_server(timeout_sec=1):
             self.get_logger().error('No action server availible!!!')
             return response
@@ -47,7 +58,11 @@ class ClientNode(Node):
 
         def done_callback(future):
             """ This callback function runs when
-            the button state response is acquired from Test Robot """
+            the button state response is acquired from Test Robot
+
+            :param future: future object to acquire result
+            :type future: future
+            """
             if str(future.result().result.value) == '1':
                 response.message = "pressed"
             else:
@@ -59,7 +74,11 @@ class ClientNode(Node):
 
         def goal_callback(future):
             """ This callback function runs when
-            goal state is acquired from Test Robot """
+            goal state is acquired from Test Robot
+
+            :param future: future object to acquire goal acception
+            :type future: future
+            """
             goal_handle = future.result()
             if not goal_handle.accepted:
                 self.get_logger().info('Goal rejected :(')
@@ -71,13 +90,14 @@ class ClientNode(Node):
             get_result_future.add_done_callback(done_callback)
 
 
-        request = ROBOT_Action.Goal() # request is initialized
+        request = robot_Action.Goal() # request is initialized
         request.gpio = str("26,read") # request is set to read the pin 26
         future = self._action_client.send_goal_async(request) # sending the request
         future.add_done_callback(goal_callback) # adding a callback function to process response
 
         event.wait() # wait for event to set free
-        self.get_logger().info('Result: {0}'.format(response)) # print the result to terminal for debugging
+        self.get_logger().info('Result: {0}'.format(response))
+        # print the result to terminal for debugging
         return response # return response to UI
 
 
@@ -87,14 +107,22 @@ class ClientNode(Node):
         a message comes from UI through topic.
         When a message is received that message is
         send to the Test Robot to activate or deactivate
-        the LED. """
+        the LED.
+
+        :param msg: input field data coming from UI
+        :type msg: string
+        """
         self.get_logger().info(msg.data)
         self.send_goal(str(msg.data))
 
     def send_goal(self, gpio):
         """ This function is used to send the gpio data
-        to the Test Robot """
-        goal_msg = ROBOT_Action.Goal()
+        to the Test Robot
+
+        :param gpio: input field data coming from UI
+        :type gpio: string
+        """
+        goal_msg = robot_Action.Goal()
         goal_msg.gpio = str(gpio)
 
         self._action_client.wait_for_server()
@@ -107,7 +135,12 @@ class ClientNode(Node):
 
     def goal_response_callback(self, future):
         """ This callback function runs when
-        the button state response is acquired from Test Robot """
+        the LED activation/deactivation request is accepted
+        by the Test Robot
+
+        :param future: future object to acquire goal acception
+        :type future: future
+        """
         goal_handle = future.result()
         if not goal_handle.accepted:
             self.get_logger().info('Goal rejected :(')
@@ -120,7 +153,11 @@ class ClientNode(Node):
 
     def get_result_callback(self, future):
         """ This callback function runs when
-        the LED state response is acquired from Test Robot """
+        the LED state response is acquired from Test Robot
+
+        :param future: future object to acquire result
+        :type future: future
+        """
         self.result = future.result().result
         self.get_logger().info('Result: {0}'.format(self.result.value))
         self.service_done_event.set()

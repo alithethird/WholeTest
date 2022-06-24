@@ -7,7 +7,7 @@ from rclpy.action import ActionServer, CancelResponse, GoalResponse
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
-from robot_interface.action import ROBOT as ROBOT_Action
+from robot_interface.action import ROBOT as robot_Action
 import RPi.GPIO as GPIO
 
 class RaspberryPIGPIO():
@@ -29,16 +29,24 @@ class RaspberryPIGPIO():
         time.sleep(0.1)
 
     def set_pin(self, value):
-        """ This function is used to set pins high or low """
+        """ This function is used to set pins high or low
+
+        :param value: pins value ro write
+        :type value: int
+        """
         if value == 1:
             GPIO.output(self.pin_id, GPIO.HIGH) #Set pin High-1
         elif value == 0:
             GPIO.output(self.pin_id, GPIO.LOW) #Set pin Low-0
 
 
-class ROBOTActionServer(Node):
+class GPIOActionServer(Node):
     """ This class is used to handle ROS2 Action server for
-    communication with Control Hub """
+    communication with Control Hub
+
+    :param Node: Main node of the robot action server
+    :type Node: rclpy.Node
+    """
     def __init__(self):
         super().__init__('test_robot_server')
 
@@ -53,7 +61,7 @@ class ROBOTActionServer(Node):
         #Node, action_type, action_name, execute_callback
         self._action_server = ActionServer(
             self,
-            ROBOT_Action,
+            robot_Action,
             'test_robot_server',
             execute_callback=self.execute_callback,
             goal_callback=self.goal_callback,
@@ -68,11 +76,22 @@ class ROBOTActionServer(Node):
 
     def goal_callback(self, goal_request):
         """ This callback function is used to create
-        goal responce accept message """
+        goal responce accept message
+
+        :param goal_request: Goal request coming from Control Hub
+        :type goal_request: ROBOT.goal
+        :return: Goal acception
+        :rtype: GoalResponse.ACCEPT
+        """
         self.get_logger().info('Received goal request')
         return GoalResponse.ACCEPT
 
     def handle_accepted_callback(self, goal_handle):
+        """ This callback function handles the goal coming from Control Hub
+
+        :param goal_handle: goal from Control Hub
+        :type goal_handle: ROBOT_interface
+        """
         with self._goal_lock:
             if self._goal_handle is not None and self._goal_handle.is_active:
                 self.get_logger().info('Aborting previous goal')
@@ -82,31 +101,47 @@ class ROBOTActionServer(Node):
         goal_handle.execute()
 
     def cancel_callback(self, goal):
+        """This callback runs when the current goal is cancelled
+
+        :param goal: Goal coming from Control Hub
+        :type goal: ROBOT.goal
+        :return: Cancel response acceptance
+        :rtype: CancelResponse.ACCEPT
+        """
         self.get_logger().info('Received cancel request')
         return CancelResponse.ACCEPT
 
     def execute_callback(self, goal_handle):
-        """Executes the goal."""
+        """ Executes the goal. The goal can be LED control
+        or reading the button state.
+        If the goal is LED control then 3 is sent back as result.
+        If the goal is reading button state then 0 or 1 is sent back as result.
+
+        :param goal_handle: goal from Control Hub
+        :type goal_handle: ROBOT_interface
+        :return: result of execution
+        :rtype: ROBOT.result
+        """
         self.get_logger().info('Executing goal...')
 
         # Populate goal message
         goal_msg = goal_handle.request.gpio
 
         # Populate feedback message
-        feedback_msg = ROBOT_Action.Feedback()
+        feedback_msg = robot_Action.Feedback()
         feedback_msg.feedback = 1
 
         # Populate result message
-        result = ROBOT_Action.Result()
+        result = robot_Action.Result()
 
         if not goal_handle.is_active:
             self.get_logger().info('Goal aborted')
-            return ROBOT_Action.Result()
+            return robot_Action.Result()
 
         if goal_handle.is_cancel_requested:
             goal_handle.canceled()
             self.get_logger().info('Goal canceled')
-            return ROBOT_Action.Result()
+            return robot_Action.Result()
 
         # Publish the feedback
         goal_handle.publish_feedback(feedback_msg)
@@ -133,7 +168,7 @@ class ROBOTActionServer(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    action_server = ROBOTActionServer()
+    action_server = GPIOActionServer()
 
     executor = MultiThreadedExecutor()
     rclpy.spin(action_server, executor=executor)

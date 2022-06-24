@@ -1,0 +1,65 @@
+\begin{sphinxtheindex}
+\let\bigletter\sphinxstyleindexlettergroup
+\let\spxpagem \sphinxstyleindexpagemain
+\let\spxentry \sphinxstyleindexentry
+\let\spxextra \sphinxstyleindexextra
+
+  \bigletter C
+  \item \spxentry{callback\_button\_state()}\spxextra{Control\_Hub.control\_hub.control\_hub.ClientNode method}, 
+		\hyperpage{1}
+  \item \spxentry{callback\_ui\_subscription()}\spxextra{Control\_Hub.control\_hub.control\_hub.ClientNode method}, 
+		\hyperpage{1}
+  \item \spxentry{cancel\_callback()}\spxextra{Test\_Robot.test\_robot.test\_robot.test\_robot\_server.GPIOActionServer method}, 
+		\hyperpage{3}
+  \item \spxentry{ClientNode}\spxextra{class in Control\_Hub.control\_hub.control\_hub}, 
+		\hyperpage{1}
+  \item \spxentry{Control\_Hub.control\_hub.control\_hub}\spxextra{module}, \hyperpage{1}
+
+  \indexspace
+  \bigletter D
+  \item \spxentry{destroy()}\spxextra{Test\_Robot.test\_robot.test\_robot.test\_robot\_server.GPIOActionServer method}, 
+		\hyperpage{3}
+
+  \indexspace
+  \bigletter E
+  \item \spxentry{execute\_callback()}\spxextra{Test\_Robot.test\_robot.test\_robot.test\_robot\_server.GPIOActionServer method}, 
+		\hyperpage{3}
+
+  \indexspace
+  \bigletter G
+  \item \spxentry{get\_result\_callback()}\spxextra{Control\_Hub.control\_hub.control\_hub.ClientNode method}, 
+		\hyperpage{1}
+  \item \spxentry{goal\_callback()}\spxextra{Test\_Robot.test\_robot.test\_robot.test\_robot\_server.GPIOActionServer method}, 
+		\hyperpage{3}
+  \item \spxentry{goal\_response\_callback()}\spxextra{Control\_Hub.control\_hub.control\_hub.ClientNode method}, 
+		\hyperpage{1}
+  \item \spxentry{GPIOActionServer}\spxextra{class in Test\_Robot.test\_robot.test\_robot.test\_robot\_server}, 
+		\hyperpage{3}
+
+  \indexspace
+  \bigletter H
+  \item \spxentry{handle\_accepted\_callback()}\spxextra{Test\_Robot.test\_robot.test\_robot.test\_robot\_server.GPIOActionServer method}, 
+		\hyperpage{3}
+
+  \indexspace
+  \bigletter M
+  \item \spxentry{main()}\spxextra{in module Control\_Hub.control\_hub.control\_hub}, \hyperpage{1}
+
+  \indexspace
+  \bigletter R
+  \item \spxentry{RaspberryPIGPIO}\spxextra{class in Test\_Robot.test\_robot.test\_robot.test\_robot\_server}, 
+		\hyperpage{3}
+
+  \indexspace
+  \bigletter S
+  \item \spxentry{send\_goal()}\spxextra{Control\_Hub.control\_hub.control\_hub.ClientNode method}, 
+		\hyperpage{1}
+  \item \spxentry{set\_pin()}\spxextra{Test\_Robot.test\_robot.test\_robot.test\_robot\_server.RaspberryPIGPIO method}, 
+		\hyperpage{3}
+
+  \indexspace
+  \bigletter T
+  \item \spxentry{Test\_Robot.test\_robot.test\_robot.test\_robot\_server}\spxextra{module}, 
+		\hyperpage{3}
+
+\end{sphinxtheindex}
