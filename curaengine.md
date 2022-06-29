@@ -75,6 +75,63 @@ make
 sudo make install
 ```
 
+if you have error:
+```
+ubuntu@ubuntu:~/Ambots/slicerTools/libArcus/build$ cmake ..
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Setting BUILD_SHARED_LIBS to ON
+-- Setting build type to 'Release' as none was specified.
+-- Generating compile commands to /home/ubuntu/Ambots/slicerTools/libArcus/build/compile_commands.json
+-- Setting POSITION_INDEPENDENT_CODE: ON
+-- Found Protobuf: /usr/local/lib/libprotobuf.so;-lpthread (found suitable version "3.17.1", minimum required is "3.17.1") 
+-- Enabling threading support for Arcus
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE  
+-- Setting Python version to 3.10. Set Python_VERSION if you want to compile against an other version.
+CMake Error at /usr/local/share/cmake-3.20/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
+  Could NOT find Python: Found unsuitable version "3.8.10", but required is
+  exact version "3.10" (found /usr/bin/python3, found components: Interpreter
+  Development Development.Module Development.Embed)
+Call Stack (most recent call first):
+  /usr/local/share/cmake-3.20/Modules/FindPackageHandleStandardArgs.cmake:592 (_FPHSA_FAILURE_MESSAGE)
+  /usr/local/share/cmake-3.20/Modules/FindPython/Support.cmake:3165 (find_package_handle_standard_args)
+  /usr/local/share/cmake-3.20/Modules/FindPython.cmake:514 (include)
+  CMakeLists.txt:77 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/ubuntu/Ambots/slicerTools/libArcus/build/CMakeFiles/CMakeOutput.log".
+See also "/home/ubuntu/Ambots/slicerTools/libArcus/build/CMakeFiles/CMakeError.log".
+```
+askes for python 3.10
+how to install 3.10
+[python 3.10](https://computingforgeeks.com/how-to-install-python-on-ubuntu-linux-system/)
+After that you also need to instal distutils for python 3.10
+```
+sudo apt install python3.10-distutils
+sudo apt install python3.10-dev 
+```
+Right now you should have 2 different python3 directories
+and then you will use this command to call to the cmake
+
+```
+cmake .. -DPYTHON_INCLUDE_DIR= /usr/include/python3.10 -DPYTHON_LIBRARY= /usr/lib/aarch64-linux-gnu
+
+```
+
+
 Make sure shared libraries can be found:
 ```
 sudo ldconfig
