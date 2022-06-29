@@ -6,7 +6,9 @@
 
 Make sure your `python3` is Python 3.8.10
 [install python 3.8.10](https://computingforgeeks.com/how-to-install-python-on-ubuntu-linux-system/)
-Make sure `cmake` is 3.16.3
+Make sure `cmake` needs to be at least `3.20.0`
+I used `3.20.2`
+[install cmake 3.20.2](https://graspingtech.com/upgrade-cmake/)
 
 Install utilities used by the build process:
 ```
