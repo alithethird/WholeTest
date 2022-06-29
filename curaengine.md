@@ -130,6 +130,36 @@ and then you will use this command to call to the cmake
 cmake .. -DPYTHON_INCLUDE_DIR= /usr/include/python3.10 -DPYTHON_LIBRARY= /usr/lib/aarch64-linux-gnu
 
 ```
+after doing that the error should change to 
+```
+ubuntu@ubuntu:~/Ambots/slicerTools/libArcus/build$ cmake .. -DPYTHON_INCLUDE_DIR= /usr/include/python3.10 -DPYTHON_LIBRARY= /usr/lib/aarch64-linux-gnu
+-- Setting BUILD_SHARED_LIBS to ON
+-- Generating compile commands to /home/ubuntu/Ambots/slicerTools/libArcus/build/compile_commands.json
+-- Setting POSITION_INDEPENDENT_CODE: ON
+-- Enabling threading support for Arcus
+-- Found Python: /usr/bin/python3.10 (found suitable exact version "3.10.5") found components: Interpreter Development Development.Module Development.Embed 
+-- Linking and building  against Python 3.10.5
+Traceback (most recent call last):
+  File "/home/ubuntu/Ambots/slicerTools/libArcus/cmake/FindSIP.py", line 34, in <module>
+    import sipbuild
+ModuleNotFoundError: No module named 'sipbuild'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/Ambots/slicerTools/libArcus/cmake/FindSIP.py", line 44, in <module>
+    import sipconfig
+ModuleNotFoundError: No module named 'sipconfig'
+CMake Error at cmake/FindSIP.cmake:58 (MESSAGE):
+  Could not find SIP
+Call Stack (most recent call first):
+  CMakeLists.txt:80 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/ubuntu/Ambots/slicerTools/libArcus/build/CMakeFiles/CMakeOutput.log".
+See also "/home/ubuntu/Ambots/slicerTools/libArcus/build/CMakeFiles/CMakeError.log".
+```
 
 
 Make sure shared libraries can be found:
